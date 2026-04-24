@@ -1,0 +1,27 @@
+<!-- liste-contacts.component.html -->
+<!-- liste-contacts.component.html -->
+
+<div>
+    <input [(ngModel)]="recherche" placeholder="🔍 Rechercher un contact...">
+    <p>{{ contactsFiltres.length }} résultat(s)</p>
+    <h2>Liste des Contacts ({{ contacts.length }})</h2>
+    <!-- Message si liste vide -->
+    <p *ngIf="contacts.length === 0">
+        Aucun contact pour le moment.
+    </p>
+    <!-- Affichage si liste non vide -->
+    <ul *ngIf="contacts.length > 0">
+        <li *ngFor="let c of contactsFiltres; let i = index">
+            <span>{{ i + 1 }}.</span>
+            <strong> {{ c.nom }} </strong>
+            — {{ c.email }}
+            <small *ngIf="c.telephone"> | {{ c.telephone }}</small>
+            <button (click)="supprimer(i)">❌</button>
+        </li>
+    </ul>
+    <!-- Ajouter dans liste-contacts.component.html -->
+    <p *ngIf="nombreAjouts > 0">
+        {{ nombreAjouts }} contact(s) ajouté(s) depuis le chargement
+    </p>
+    <small>Liste chargée à : {{ dateChargement }}</small>
+</div>

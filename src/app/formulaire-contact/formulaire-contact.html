@@ -1,0 +1,16 @@
+<!-- formulaire-contact.html -->
+<!-- formulaire-contact.component.html -->
+<div>
+    <h2>Ajouter un Contact</h2>
+    <input [(ngModel)]="nom" placeholder="Nom complet *">
+    <input [(ngModel)]="email" type="email" placeholder="Email *">
+    <input [(ngModel)]="telephone" placeholder="Téléphone">
+    <!-- Aperçu conditionnel -->
+    <div *ngIf="nom">
+        <strong>Aperçu :</strong> {{ nom }} — {{ email }}
+    </div>
+    <!-- Bouton déclenche sauvegarder() -->
+    <button (click)="sauvegarder()">
+        ➕ Ajouter le contact
+    </button>
+</div>
