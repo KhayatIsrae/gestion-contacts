@@ -2,5 +2,7 @@
 export interface Contact {
     nom: string;
     email: string;
-    telephone: string;
+    actif: boolean;
+    score: number; // 0-20
+    role: 'admin' | 'user' | 'guest';
 }

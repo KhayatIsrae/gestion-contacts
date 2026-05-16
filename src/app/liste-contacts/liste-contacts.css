@@ -1,0 +1,40 @@
+/* liste-contacts.component.css */
+.contact-actif {
+    background: #E8F5E9;
+    border-left: 4px solid #4CAF50;
+}
+
+.contact-inactif {
+    background: #FFEBEE;
+    border-left: 4px solid #F44336;
+    color: #9E9E9E;
+}
+
+.top-score {
+    font-weight: bold;
+}
+
+.score-excellent {
+    color: #1565C0;
+}
+
+.score-passable {
+    color: #E65100;
+}
+
+.score-echec {
+    color: #B71C1C;
+    text-decoration: line-through;
+}
+
+.premier-item {
+    border-top: 2px solid #673AB7;
+}
+
+.active {
+    border: 2px solid #4CAF50;
+}
+
+.hovered {
+    background: #FFF9C4;
+}

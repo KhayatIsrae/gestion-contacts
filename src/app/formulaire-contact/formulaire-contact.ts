@@ -42,21 +42,23 @@ export class FormulaireContact {
   // Propriétés liées au formulaire
   nom: string = '';
   email: string = '';
-  telephone: string = '';
-  age: number = 0;
+  score: number = 0;
 
   @Output() contactSauvegarde = new EventEmitter<Contact>();
   sauvegarder(): void {
     // Vérifier que les champs obligatoires sont remplis
-    if (this.nom.trim() && this.email.trim()) {
+    if (this.nom.trim() && this.email.trim() && this.score < 20 && this.score >= 0) {
       // Émettre le contact vers le parent
       this.contactSauvegarde.emit({
         nom: this.nom,
         email: this.email,
-        telephone: this.telephone
+        actif: true,
+        score: this.score, // 0-20
+        role: 'user'
       });
       // Réinitialiser le formulaire
-      this.nom = this.email = this.telephone = '';
+      this.nom = this.email = '';
+      this.score =  0;
     } else {
       alert('Veuillez remplir le nom et l\'email.');
     }

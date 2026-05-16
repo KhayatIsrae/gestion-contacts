@@ -4,7 +4,7 @@
     <h2>Ajouter un Contact</h2>
     <input [(ngModel)]="nom" placeholder="Nom complet *">
     <input [(ngModel)]="email" type="email" placeholder="Email *">
-    <input [(ngModel)]="telephone" placeholder="Téléphone">
+    <input [(ngModel)]="score"  type="number" placeholder="score">
     <!-- Aperçu conditionnel -->
     <div *ngIf="nom">
         <strong>Aperçu :</strong> {{ nom }} — {{ email }}

@@ -9,19 +9,64 @@
     <p *ngIf="contacts.length === 0">
         Aucun contact pour le moment.
     </p>
+    <button (click)="filtreActif = null" appHighlight>Tous ({{ contacts.length }})</button>
+    <button (click)="filtreActif = true" appHighlight>Actifs</button>
+    <button (click)="filtreActif = false" appHighlight>Inactifs</button>
     <!-- Affichage si liste non vide -->
     <ul *ngIf="contacts.length > 0">
-        <li *ngFor="let c of contactsFiltres; let i = index">
+        <!-- <li *ngFor="let c of contactsFiltres; let i = index">
             <span>{{ i + 1 }}.</span>
             <strong> {{ c.nom }} </strong>
             — {{ c.email }}
-            <small *ngIf="c.telephone"> | {{ c.telephone }}</small>
-            <button (click)="supprimer(i)">❌</button>
+            <button (click)="supprimer(c.email)">❌</button>
+        </li> -->
+        <!-- contactsFiltres l'appel au getter -->
+        @for (c of contactsFiltres; track c.email; let i = $index) {
+        <li [ngClass]="{        
+    'contact-actif': c.actif,
+    'contact-inactif': !c.actif,
+    'top-score': c.score >= 16,
+    'premier-item': $first
+    }" [appSurvol]="c.role === 'admin' ? '#FFE0E0' : '#E0F0FF'">
+            <span>{{ i + 1 }}</span>
+            <!-- slice : afficher seulement les 20 premiers caractères de l'email -->
+            {{ c.nom | uppercase}}
+            <em>{{ c.email | slice:0:20 }}</em>
+
+            — Score :
+            <!-- Forme 2 : expression de classe concatenée -->
+            <span [ngClass]="'score-' + (c.score >= 16 ? 'excellent' :
+c.score >= 10 ? 'passable' : 'echec')">
+                {{ c.score | number : '1.1-1'}}/20
+                - Mention: {{c.score | mention}}
+                <!-- Taux de réussite en pourcentage -->
+                ({{ c.score / 20 | percent:'1.0-0' }})
+                <!-- Chaînage de pipes -->
+                Initiales : {{ c.nom | initiales : '-'}}
+                @switch (c.role) {
+                @case ('admin') {
+                <span>📈 Admin</span>
+                }
+                @case ('user') {
+                <span>📈 Utilisateur</span>
+                }
+                @case ('guest') {
+                <span>📈 Visiteur</span>
+                }
+                @default {
+                <span>❓ Rôle inconnu</span>
+                }
+                }
+                <button (click)="supprimer(c.email)">❌</button>
+            </span>
         </li>
+        } @empty {
+        <li>Aucun résultat pour ce filtre.</li>
+        }
     </ul>
     <!-- Ajouter dans liste-contacts.component.html -->
     <p *ngIf="nombreAjouts > 0">
-        {{ nombreAjouts }} contact(s) ajouté(s) depuis le chargement
+        {{ nombreAjouts }} contact(s) ajouté(s) ou supprimé(s) depuis le chargement
     </p>
-    <small>Liste chargée à : {{ dateChargement }}</small>
+    <small>Liste chargée à : {{ dateChargement | date:'HH:mm:ss' }}</small>
 </div>

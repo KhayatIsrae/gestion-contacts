@@ -3,46 +3,49 @@ import { Component, Input, EventEmitter, Output, OnInit, OnDestroy, OnChanges, S
 import { CommonModule } from '@angular/common';
 import { Contact } from '../contact.interface';
 import { FormsModule } from '@angular/forms'; //active ngmodel
+import { ContactService } from '../contact';
+import { Survol } from '../survol';
+import { InitialesPipe } from '../initiales-pipe';
+import { HighlightDirective } from '../hilight';
+import { MentionPipe } from '../mention-pipe';
 
 
 @Component({
   selector: 'app-liste-contacts',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Survol, InitialesPipe, HighlightDirective, MentionPipe],
   templateUrl: './liste-contacts.html',
   styleUrl: './liste-contacts.css',
 })
-export class ListeContacts implements OnInit, OnDestroy, OnChanges {
+export class ListeContacts implements OnDestroy, OnChanges {
   @Input() contacts: Contact[] = [];
-  @Output() contactSupprime = new EventEmitter<number>();
-  supprimer(index: number): void {
+  nombreAjouts: number = 0;
+  dateChargement: Date = new Date();
+  recherche: string = '';
+  constructor(private contactService: ContactService) { }
+
+  filtreActif: boolean | null = null;
+
+  @Output() contactSupprime = new EventEmitter<string>();
+  supprimer(email: string): void {
     if (confirm('Confirmer la suppression ?')) {
-      this.contactSupprime.emit(index);
+      this.contactSupprime.emit(email);
     }
   }
-  nombreAjouts: number = 0;
-  dateChargement: string = '';
-  recherche: string = '';
+
   get contactsFiltres(): Contact[] {
     // get signifie que: contactsFiltres se comporte comme une variable
     //mais elle est calculée à chaque fois.
-    if (!this.recherche.trim()) return this.contacts;
+    let contactsF1: Contact[];
+    if (this.filtreActif === null) contactsF1 = this.contacts;
+    else contactsF1 = this.contacts.filter(c => c.actif === this.filtreActif);
+    if (!this.recherche.trim()) return contactsF1;
     const terme = this.recherche.toLowerCase();
-    return this.contacts.filter(c =>
+    return contactsF1.filter(c =>
       c.nom.toLowerCase().includes(terme) ||
       c.email.toLowerCase().includes(terme)
     );
   }
-  constructor() {
-    console.log('[1] constructor() appelé');
-    // NE PAS accéder aux @Input() ici - ils ne sont pas encore remplis !
-  }
-  // ngOnInit : tout le reste de l'initialisation
-  ngOnInit(): void {
-    console.log('[2] ngOnInit() appelé');
-    console.log(` Contacts reçus : ${this.contacts.length}`);
-    // Enregistrer l'heure de chargement
-    this.dateChargement = new Date().toLocaleTimeString('fr-FR');
-  }
+
   // ngOnDestroy : libérer les ressources
   ngOnDestroy(): void {
     console.log('[3] ngOnDestroy() appelé — nettoyage');

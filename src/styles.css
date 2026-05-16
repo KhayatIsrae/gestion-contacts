@@ -74,3 +74,5 @@ li {
     border-radius: 4px;
     margin-top: 10px;
 }
+.active { border: 2px solid #4CAF50; }
+.hovered { background: #FFF9C4; }
